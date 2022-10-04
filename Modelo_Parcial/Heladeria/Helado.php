@@ -1,20 +1,18 @@
 <?php
 
-class Helado{
+include "FileManager.php";
+
+class Helado {
     private $_id;
     private $_sabor;
     private $_precioBruto;
     private $_tipo;
     private $_cantidad;
     private $_precioFinal;
-   
-    private static autoincremento(){
-
-    }
 
 
     public __construct($sabor, $precioBruto, $tipo, $cantidad){
-        $this->$_id          = autoincremento();
+        $this->$_id          = cargarIdJson();
         setSabor($sabor);
         setPrecioBruto($precioBruto);
         setTipo($tipo);
@@ -59,8 +57,25 @@ class Helado{
         return $_precioBruto * 1.21;
     }
 
+    public static function cargarIdJson(){
+        $retorno = "1";
+        $helado = Helado::leerJson("helados.json");
+      
+        if(count($helado) > 0){
+            $id = (int)$helado[count($helado)-1]->_id;
+            $id ++;
+            $retorno = (string)$id;
+        }      
+        return $retorno;
+    }
+
     public consultarSaboryTipo($heladito){
         return (isset($heladito) && is_a($heladito, "Helado") && $heladito.getSabor() == $this.getSabor() && $heladito.getTipo() == $this.getTipo());
+    }
+
+
+    public function guardarHeladoJson(){
+        return (FileManager.guardarJson("usuarios.json",$this));
     }
 
     
